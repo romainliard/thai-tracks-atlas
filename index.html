@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Thailand Mesozoic Footprint Atlas</title>
+    <title>Thailand Mesozoic Trackways Atlas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .active-link { border-left: 4px solid #4f46e5; background: #f5f3ff; color: #4f46e5; }
@@ -11,18 +11,26 @@
 <body class="bg-slate-50 flex h-screen overflow-hidden">
 
     <!-- Sidebar Navigation -->
-    <nav class="w-72 bg-white border-r flex flex-col">
+    <nav class="w-80 bg-white border-r flex flex-col">
         <div class="p-6 border-b bg-indigo-900 text-white">
-            <h1 class="font-bold text-lg leading-tight">Mesozoic Atlas: Thailand</h1>
+            <h1 class="font-bold text-lg leading-tight" id="atlas-title">Mesozoic Atlas</h1>
+            <p class="text-xs opacity-70 mt-1" id="atlas-source"></p>
         </div>
         <div id="menu" class="flex-1 overflow-y-auto py-4">
-            <!-- Menu items injected here -->
+            <div class="px-6 mb-2 text-xs font-semibold text-gray-400 uppercase">General</div>
+            <button onclick="renderIntro()" class="w-full text-left px-6 py-3 transition hover:bg-gray-50 text-gray-700 font-medium">1. Introduction</button>
+            <button onclick="renderTable()" class="w-full text-left px-6 py-3 transition hover:bg-gray-50 text-gray-700 font-medium">2. Full Site Inventory</button>
+            
+            <div class="px-6 mt-6 mb-2 text-xs font-semibold text-gray-400 uppercase">Browse Sites (19)</div>
+            <div id="site-list">
+                <!-- Site names will appear here -->
+            </div>
         </div>
     </nav>
 
     <!-- Main Content Area -->
     <main class="flex-1 overflow-y-auto p-12">
-        <div id="content-view" class="max-w-4xl mx-auto bg-white shadow-sm border p-10 rounded-lg">
+        <div id="content-view" class="max-w-4xl mx-auto bg-white shadow-sm border p-10 rounded-lg min-h-full">
             <!-- Content injected here -->
         </div>
     </main>
@@ -31,60 +39,121 @@
         let atlasData = {};
 
         async function init() {
-            const res = await fetch('atlas.json');
-            atlasData = await res.json();
-            renderMenu();
-            renderSection('intro'); // Default page
+            try {
+                // Ensure filename matches exactly
+                const res = await fetch('atlas_geothai.json'); 
+                atlasData = await res.json();
+                
+                document.getElementById('atlas-title').innerText = atlasData.metadata.title;
+                document.getElementById('atlas-source').innerText = atlasData.metadata.source;
+                
+                renderSiteMenu();
+                renderIntro(); // Start with Introduction
+            } catch (e) {
+                document.getElementById('content-view').innerHTML = "Error loading JSON data. Check console.";
+            }
         }
 
-        function renderMenu() {
-            const menu = document.getElementById('menu');
-            menu.innerHTML = atlasData.sections.map(s => `
-                <button onclick="renderSection('${s.id}')" id="btn-${s.id}" 
-                   class="w-full text-left px-6 py-3 transition hover:bg-gray-50 text-gray-700 font-medium">
-                    ${s.title}
+        function renderSiteMenu() {
+            const list = document.getElementById('site-list');
+            list.innerHTML = atlasData.sites.map(s => `
+                <button onclick="renderSiteDetail(${s.id})" class="w-full text-left px-8 py-2 text-sm transition hover:text-indigo-600 text-gray-600">
+                    ${s.id}. ${s.name}
                 </button>
             `).join('');
         }
 
-        function renderSection(id) {
-            // Update Menu UI
-            document.querySelectorAll('#menu button').forEach(b => b.classList.remove('active-link'));
-            document.getElementById('btn-'+id).classList.add('active-link');
-
-            const section = atlasData.sections.find(s => s.id === id);
+        function renderIntro() {
             const view = document.getElementById('content-view');
+            view.innerHTML = `
+                <h2 class="text-3xl font-bold mb-6 text-indigo-900 border-b pb-4">Introduction</h2>
+                <p class="text-lg leading-relaxed text-gray-800 mb-6">
+                    Thailand preserves one of the most extensive records of Mesozoic vertebrate tracks in Tropical Asia. 
+                    This review compiles and reassesses all known Triassic to Cretaceous vertebrate tracksites 
+                    in Thailand to clarify their stratigraphic distribution, taxonomic diversity, and 
+                    palaeobiogeographical significance.
+                </p>
+                <div class="bg-indigo-50 p-6 rounded-lg border border-indigo-100">
+                    <h4 class="font-bold text-indigo-900 mb-2">Metadata Summary</h4>
+                    <ul class="text-sm space-y-1">
+                        <li><strong>Region:</strong> ${atlasData.metadata.region}</li>
+                        <li><strong>Catalogue Size:</strong> ${atlasData.metadata.total_sites} Registered Localities</li>
+                        <li><strong>Scientific Reference:</strong> ${atlasData.metadata.source}</li>
+                    </ul>
+                </div>
+            `;
+        }
 
-            let html = `<h2 class="text-3xl font-bold mb-6 text-indigo-900 border-b pb-4">${section.title}</h2>`;
+        function renderTable() {
+            const view = document.getElementById('content-view');
+            view.innerHTML = `
+                <h2 class="text-3xl font-bold mb-6 text-indigo-900 border-b pb-4">Full Inventory (Table 1)</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left border border-collapse">
+                        <thead class="bg-gray-100 font-bold">
+                            <tr>
+                                <th class="p-3 border">ID</th>
+                                <th class="p-3 border">Site Name</th>
+                                <th class="p-3 border">Formation</th>
+                                <th class="p-3 border">Age/Stage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${atlasData.sites.map(s => `
+                                <tr class="hover:bg-gray-50">
+                                    <td class="p-3 border">${s.id}</td>
+                                    <td class="p-3 border font-semibold text-indigo-700 cursor-pointer" onclick="renderSiteDetail(${s.id})">${s.name}</td>
+                                    <td class="p-3 border">${s.stratigraphy.formation}</td>
+                                    <td class="p-3 border">${s.stratigraphy.stage}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderSiteDetail(id) {
+            const site = atlasData.sites.find(s => s.id === id);
+            const view = document.getElementById('content-view');
             
-            if (section.content) html += `<p class="text-lg leading-relaxed text-gray-800 mb-6">${section.content}</p>`;
+            view.innerHTML = `
+                <nav class="text-sm text-gray-500 mb-4">Sites / ${site.stratigraphy.formation} /</nav>
+                <h2 class="text-4xl font-bold mb-2 text-indigo-900">${site.name}</h2>
+                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded uppercase font-bold mb-8">${site.stratigraphy.serie}</span>
 
-            // Render Table if Section is Inventory
-            if (section.type === 'table') {
-                html += `
-                    <div class="overflow-x-auto mt-6">
-                        <table class="w-full text-sm text-left border">
-                            <thead class="bg-gray-100">
-                                <tr><th class="p-2 border">ID</th><th class="p-2 border">Site</th><th class="p-2 border">Formation</th><th class="p-2 border">Age</th></tr>
-                            </thead>
-                            <tbody>
-                                ${section.data.map(d => `<tr><td class="p-2 border">${d.id}</td><td class="p-2 border font-bold">${d.name}</td><td class="p-2 border">${d.fm}</td><td class="p-2 border">${d.age}</td></tr>`).join('')}
-                            </tbody>
-                        </table>
-                    </div>`;
-            }
-
-            // Render Subsections if they exist (Results section)
-            if (section.subsections) {
-                html += section.subsections.map(sub => `
-                    <div class="mt-8">
-                        <h3 class="text-xl font-bold text-indigo-700 mb-2">${sub.title}</h3>
-                        <p class="text-gray-700 leading-relaxed">${sub.content}</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-bold text-gray-400 uppercase text-xs tracking-widest mb-4">Stratigraphic Data</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-xs text-gray-500">Formation</p>
+                                <p class="font-medium text-lg">${site.stratigraphy.formation}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500">Stage/Age</p>
+                                <p class="font-medium text-lg">${site.stratigraphy.stage} (${site.stratigraphy.ma || 'Unknown'} Ma)</p>
+                            </div>
+                             <div>
+                                <p class="text-xs text-gray-500">Location</p>
+                                <p class="font-medium">${site.location}</p>
+                            </div>
+                        </div>
                     </div>
-                `).join('');
-            }
 
-            view.innerHTML = html;
+                    <div class="bg-gray-50 p-6 rounded-xl">
+                        <h3 class="font-bold text-gray-400 uppercase text-xs tracking-widest mb-4">Ichnological Summary</h3>
+                        <p class="text-sm mb-4"><strong class="text-gray-700">Inferred Trackmakers:</strong><br> ${site.ichnology.trackmakers.join(', ')}</p>
+                        <p class="text-sm mb-4"><strong class="text-gray-700">Ichnogenus:</strong><br> ${site.ichnology.genus.join(', ')}</p>
+                        <p class="text-sm border-t pt-4"><strong class="text-gray-700">Conservation:</strong><br> ${site.conservation}</p>
+                    </div>
+                </div>
+
+                <div class="mt-10 p-6 border-l-4 border-indigo-200 bg-slate-50">
+                    <h4 class="text-xs font-bold text-gray-400 uppercase mb-2">Corresponding Taxa from Thai Record</h4>
+                    <p class="italic text-gray-700">${site.taxa}</p>
+                </div>
+            `;
         }
 
         init();
