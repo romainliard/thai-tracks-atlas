@@ -92,4 +92,111 @@ let atlasData = { sites: [] };
         function renderTable() {
             window.location.hash = "inventory";
             window.scrollTo(0,0);
-            const view = document.getElementById('
+            const view = document.getElementById('content-view');
+            view.innerHTML = `
+                <h2 class="heading-font text-2xl mb-8 text-white uppercase italic">Full Inventory</h2>
+                <div class="overflow-x-auto rounded border border-slate-800 shadow-2xl bg-[#11141b]">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
+                        <thead>
+                            <tr class="bg-slate-800 text-[9px] mono text-white uppercase">
+                                <th class="p-4">Ref_ID</th>
+                                <th class="p-4">Locality</th>
+                                <th class="p-4">Formation</th>
+                                <th class="p-4">Age</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-800 mono text-[11px]">
+                            ${atlasData.sites.map(s => `
+                                <tr class="hover:bg-green-900/40 transition-colors cursor-pointer group" onclick="location.hash='${s.id}'; closeOnMobile();">
+                                    <td class="p-4 text-slate-600">ID_${s.id}</td>
+                                    <td class="p-4 font-bold text-yellow-500 uppercase">${s.name}</td>
+                                    <td class="p-4 text-slate-400 italic">${s.stratigraphy.formation}</td>
+                                    <td class="p-4 text-slate-500">${s.stratigraphy.stage}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        function renderSiteDetail(id) {
+            window.location.hash = id;
+            window.scrollTo(0,0);
+            const site = atlasData.sites.find(s => s.id === id);
+            const view = document.getElementById('content-view');
+            
+            document.querySelectorAll('#site-list button').forEach(b => b.classList.remove('active-site'));
+            document.getElementById('btn-'+id)?.classList.add('active-site');
+
+            view.innerHTML = `
+                <div class="mb-10 border-b-2 border-slate-800 pb-8 flex justify-between items-start">
+                    <div>
+                        <nav class="mono text-[10px] text-yellow-500 mb-2 font-bold tracking-[0.3em] uppercase">Locality_Record // ${site.stratigraphy.serie}</nav>
+                        <h2 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter uppercase leading-none">${site.name}</h2>
+                        <p class="mono text-[10px] text-slate-500 mt-4 font-bold tracking-widest">${site.location.toUpperCase()}</p>
+                    </div>
+                    <!-- Share/QR Link Button -->
+                    <button onclick="copyLink()" class="bg-slate-800 text-slate-400 hover:text-yellow-400 p-2 rounded mono text-[9px] uppercase border border-slate-700">
+                        Copy Link for QR
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center md:text-left">
+                            <div class="p-4 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
+                                <h4 class="mono text-[9px] text-slate-500 uppercase mb-2">Formation</h4>
+                                <p class="heading-font text-white text-base">${site.stratigraphy.formation}</p>
+                            </div>
+                            <div class="p-4 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
+                                <h4 class="mono text-[9px] text-slate-500 uppercase mb-2">Age_Stage</h4>
+                                <p class="heading-font text-white text-base">${site.stratigraphy.stage}</p>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#11141b] border border-slate-800 p-6 md:p-8 rounded-sm shadow-2xl relative overflow-hidden">
+                            <h3 class="heading-font text-xs text-yellow-500 mb-8 border-b border-slate-800 pb-4 tracking-widest">Ichnological Synthesis</h3>
+                            <div class="space-y-8">
+                                <div>
+                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold">Assessed Trackmakers</h4>
+                                    <p class="text-xl md:text-2xl font-black text-slate-200 leading-tight tracking-tight">${site.ichnology.trackmakers.join(' • ').toUpperCase()}</p>
+                                </div>
+                                <div>
+                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold">Ichnogenus Identification</h4>
+                                    <p class="text-sm italic text-slate-400 font-serif leading-relaxed font-bold">${site.ichnology.genus.join(', ')}</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-green-900/20 border-t-4 border-green-700 p-6 shadow-2xl">
+                            <h3 class="heading-font text-[10px] text-green-500 mb-4 uppercase">Field Assessment</h3>
+                            <div class="space-y-4 mono text-[10px]">
+                                <div>
+                                    <p class="text-slate-600 uppercase mb-1">Conservation Index</p>
+                                    <p class="text-slate-200 font-bold leading-relaxed text-xs">${site.conservation.toUpperCase()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-slate-600 uppercase mb-1">Discovery Record</p>
+                                    <p class="text-slate-200 font-bold text-xs">${site.discovery.discoverer.toUpperCase()} / ${site.discovery.year}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-black/40 border border-slate-800 p-6 rounded-sm">
+                            <h4 class="mono text-[9px] font-black text-slate-700 uppercase mb-2">Comparative Taxa</h4>
+                            <p class="text-[10px] text-slate-500 italic leading-relaxed uppercase">${site.taxa}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Function to copy current URL to clipboard
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Shareable Link Copied to Clipboard!");
+        }
+
+        init();
