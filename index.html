@@ -17,62 +17,95 @@
             height: 6px;
         }
 
-        /* Specific Formation Styles for Sidebar */
-        .fm-huai-hin-lat { background-color: #ddd6fe; color: #4c1d95; border-left: 6px solid #8b5cf6; } /* Pastel Violet */
-        .fm-nam-phong { background-color: #bae6fd; color: #0c4a6e; border-left: 6px solid #0ea5e9; }    /* Pastel Blue */
-        .fm-phra-wihan { background-color: #064e3b; color: #ecfdf5; border-left: 6px solid #065f46; }    /* Deep Green */
-        .fm-sao-khua { background-color: #10b981; color: #064e3b; border-left: 6px solid #059669; }      /* Light Green */
-        .fm-phu-phan { background-color: #6ee7b7; color: #064e3b; border-left: 6px solid #34d399; }      /* Even Lighter Green */
-        .fm-khok-kruat { background-color: #ecfdf5; color: #064e3b; border-left: 6px solid #a7f3d0; }    /* Cream Green */
+        /* Formation Color Classes */
+        .fm-huai-hin-lat { background-color: #ddd6fe; color: #4c1d95; border-left: 6px solid #8b5cf6; }
+        .fm-nam-phong { background-color: #bae6fd; color: #0c4a6e; border-left: 6px solid #0ea5e9; }
+        .fm-phra-wihan { background-color: #064e3b; color: #ecfdf5; border-left: 6px solid #065f46; }
+        .fm-sao-khua { background-color: #10b981; color: #064e3b; border-left: 6px solid #059669; }
+        .fm-phu-phan { background-color: #6ee7b7; color: #064e3b; border-left: 6px solid #34d399; }
+        .fm-khok-kruat { background-color: #ecfdf5; color: #064e3b; border-left: 6px solid #a7f3d0; }
         
-        .sidebar-item { 
-            transition: all 0.2s; 
-            margin-bottom: 2px;
-            opacity: 0.85;
-        }
+        .sidebar-item { transition: all 0.2s; margin-bottom: 2px; opacity: 0.9; }
         .sidebar-item:hover { opacity: 1; transform: translateX(4px); }
-        .active-site { opacity: 1; transform: translateX(8px); box-shadow: -4px 0 15px rgba(250, 204, 21, 0.3); }
+        .active-site { opacity: 1; transform: translateX(8px); outline: 2px solid #facc15; }
 
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0c0e12; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+        /* Animation for Sidebar */
+        #sidebar { transition: transform 0.3s ease-in-out; }
+        .sidebar-hidden { transform: translateX(-100%); }
+
+        @media (min-width: 1024px) {
+            #sidebar { transform: translateX(0) !important; }
+        }
     </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body class="flex h-screen overflow-hidden relative">
 
-    <!-- Sidebar -->
-    <nav class="w-80 bg-[#11141b] border-r border-slate-800 flex flex-col z-40 shadow-2xl">
+    <!-- MOBILE OVERLAY -->
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-30 hidden lg:hidden"></div>
+
+    <!-- SIDEBAR -->
+    <nav id="sidebar" class="fixed lg:relative w-80 h-full bg-[#11141b] border-r border-slate-800 flex flex-col z-40 sidebar-hidden lg:transform-none shadow-2xl">
         <div class="caution-bar"></div>
-        <div class="p-6 border-b border-slate-800 bg-black/20">
-            <h1 class="text-xl text-white italic leading-tight">Mesozoic Atlas<br><span class="text-yellow-400 uppercase tracking-tighter">Thailand</span></h1>
-            <p class="text-[9px] mono text-slate-500 mt-2 tracking-[0.3em] uppercase">Stratigraphic Database</p>
+        <div class="p-6 border-b border-slate-800 bg-black/20 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl text-white italic leading-tight">Mesozoic Atlas<br><span class="text-yellow-400 uppercase tracking-tighter">Thailand</span></h1>
+                <p class="text-[9px] mono text-slate-500 mt-2 tracking-[0.3em] uppercase">Stratigraphic Database</p>
+            </div>
+            <!-- Close Button for Mobile -->
+            <button onclick="toggleSidebar()" class="lg:hidden text-slate-500 hover:text-white text-2xl">✕</button>
         </div>
         
         <div id="menu" class="flex-1 overflow-y-auto py-4">
-            <button onclick="renderIntro()" class="w-full text-left px-6 py-3 hover:bg-slate-800 text-slate-400 font-bold text-xs tracking-widest border-l-4 border-transparent mb-4 transition-all uppercase">Summary Abstract</button>
-            <button onclick="renderTable()" class="w-full text-left px-6 py-3 hover:bg-slate-800 text-slate-400 font-bold text-xs tracking-widest border-l-4 border-transparent mb-8 transition-all uppercase">Inventory Table</button>
+            <button onclick="renderIntro(); closeOnMobile();" class="w-full text-left px-6 py-3 hover:bg-slate-800 text-slate-400 font-bold text-xs tracking-widest border-l-4 border-transparent mb-2 transition-all uppercase">Summary Abstract</button>
+            <button onclick="renderTable(); closeOnMobile();" class="w-full text-left px-6 py-3 hover:bg-slate-800 text-slate-400 font-bold text-xs tracking-widest border-l-4 border-transparent mb-6 transition-all uppercase">Inventory Table</button>
             
             <div class="px-6 mb-3 text-[10px] font-black text-slate-600 uppercase tracking-widest flex justify-between">
                 <span>Localities</span>
                 <span>Formation Map</span>
             </div>
-            <div id="site-list" class="px-2 space-y-1">
+            <div id="site-list" class="px-2 space-y-1 pb-10">
                 <!-- Site links will be generated here -->
             </div>
         </div>
     </nav>
 
-    <!-- Content Area -->
-    <main class="flex-1 overflow-y-auto p-6 lg:p-12 bg-[#0c0e12]">
-        <div id="content-view" class="max-w-5xl mx-auto min-h-full">
-            <div class="flex items-center justify-center h-64 text-slate-600 animate-pulse mono text-xs">
-                INITIALIZING DATA_STREAM...
+    <!-- MAIN CONTENT -->
+    <div class="flex-1 flex flex-col min-w-0">
+        
+        <!-- MOBILE HEADER -->
+        <header class="lg:hidden bg-[#11141b] border-b border-slate-800 p-4 flex items-center justify-between z-20">
+            <button onclick="toggleSidebar()" class="text-yellow-400 p-2 border border-slate-700 rounded bg-slate-800">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+            </button>
+            <span class="heading-font text-sm tracking-widest text-slate-300">Atlas Explorer</span>
+            <div class="w-10"></div> <!-- Spacer -->
+        </header>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 bg-[#0c0e12]">
+            <div id="content-view" class="max-w-5xl mx-auto min-h-full">
+                <div class="flex items-center justify-center h-64 text-slate-600 animate-pulse mono text-xs">
+                    CONNECTING_DATA_STREAM...
+                </div>
             </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <script>
         let atlasData = { sites: [] };
+
+        // NAVIGATION LOGIC
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebar.classList.toggle('sidebar-hidden');
+            overlay.classList.toggle('hidden');
+        }
+
+        function closeOnMobile() {
+            if (window.innerWidth < 1024) {
+                toggleSidebar();
+            }
+        }
 
         async function init() {
             try {
@@ -81,16 +114,10 @@
                 renderSiteMenu();
                 renderIntro(); 
             } catch (err) {
-                document.getElementById('content-view').innerHTML = `
-                    <div class="border-2 border-red-800 p-8 bg-red-950/20 text-red-500 rounded">
-                        <h2 class="heading-font text-2xl mb-2">Connection Error</h2>
-                        <p class="mono text-xs">Failed to load atlas.json: ${err.message}</p>
-                    </div>
-                `;
+                document.getElementById('content-view').innerHTML = `<div class="p-8 bg-red-950/20 text-red-500 rounded border border-red-800">Error: ${err.message}</div>`;
             }
         }
 
-        // Helper to determine the CSS class based on formation name
         function getFmClass(fm) {
             const name = fm.toLowerCase();
             if (name.includes("huai hin lat")) return "fm-huai-hin-lat";
@@ -99,7 +126,7 @@
             if (name.includes("sao khua")) return "fm-sao-khua";
             if (name.includes("phu phan")) return "fm-phu-phan";
             if (name.includes("khok kruat")) return "fm-khok-kruat";
-            return "bg-slate-800 text-white"; // Fallback
+            return "bg-slate-800 text-white";
         }
 
         function renderSiteMenu() {
@@ -107,9 +134,9 @@
             list.innerHTML = atlasData.sites.map(s => {
                 const colorClass = getFmClass(s.stratigraphy.formation);
                 return `
-                <button onclick="renderSiteDetail(${s.id})" id="btn-${s.id}" 
-                    class="w-full text-left px-4 py-2 rounded-sm text-[10px] font-bold mono sidebar-item ${colorClass}">
-                    ${s.id.toString().padStart(2, '0')} // ${s.name.toUpperCase()}
+                <button onclick="renderSiteDetail(${s.id}); closeOnMobile();" id="btn-${s.id}" 
+                    class="w-full text-left px-4 py-3 rounded-sm text-[10px] font-bold mono sidebar-item ${colorClass}">
+                    ID_${s.id.toString().padStart(2, '0')} // ${s.name.toUpperCase()}
                 </button>
                 `;
             }).join('');
@@ -120,29 +147,15 @@
             const view = document.getElementById('content-view');
             view.innerHTML = `
                 <div class="border-b-4 border-yellow-400 pb-6 mb-10">
-                    <h2 class="text-6xl font-black text-white italic tracking-tighter">Project Inventory</h2>
-                    <p class="mono text-yellow-400 text-xs mt-2 uppercase tracking-widest">Mesozoic Vertebrate Footprints of Thailand</p>
+                    <h2 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter">Project Inventory</h2>
+                    <p class="mono text-yellow-400 text-[10px] mt-2 uppercase tracking-widest">Mesozoic Vertebrate Footprints of Thailand</p>
                 </div>
-                
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                    <div class="lg:col-span-2 space-y-6 text-slate-300 text-lg leading-relaxed">
-                        <p>Thailand preserves one of the most extensive records of Mesozoic vertebrate tracks in Tropical Asia. This database reassesses all known <span class="text-white font-bold underline decoration-yellow-500">Triassic to Cretaceous</span> tracksites within the Khorat Group.</p>
-                        
-                        <div class="bg-[#1a1d24] p-8 border-l-8 border-green-700 rounded-sm shadow-2xl">
-                            <h4 class="heading-font text-green-500 text-sm mb-4 tracking-widest">Executive Findings</h4>
-                            <p class="text-base italic text-slate-300 leading-relaxed font-serif">
-                                "The Thai record documents diverse assemblages including chirotheriids, early theropods, sauropodomorphs, ornithopods, sauropods, and crocodilians... capturing a major faunal transition from non-dinosaurian archosaurs to some of the earliest dinosaurs in the region."
-                            </p>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-[#11141b] border border-slate-800 p-6 rounded shadow-2xl">
-                        <h3 class="heading-font text-[10px] text-slate-500 mb-6 tracking-[0.2em] border-b border-slate-800 pb-2 uppercase">System Metadata</h3>
-                        <div class="space-y-6 mono text-[10px]">
-                            <div><p class="text-slate-600 uppercase mb-1">Primary Source</p><p class="text-slate-300 leading-relaxed">${atlasData.metadata.source}</p></div>
-                            <div><p class="text-slate-600 uppercase mb-1">Geographic Scope</p><p class="text-slate-300">${atlasData.metadata.region}</p></div>
-                            <div><p class="text-slate-600 uppercase mb-1">Database Size</p><p class="text-white font-bold text-sm underline decoration-yellow-500">${atlasData.metadata.total_sites} REGISTERED SITES</p></div>
-                        </div>
+                <div class="space-y-6 text-slate-300 text-base md:text-lg">
+                    <p>Thailand preserves one of the most extensive records of Mesozoic vertebrate tracks in Tropical Asia. This database reassesses all known tracksites within the Khorat Group.</p>
+                    <div class="bg-[#1a1d24] p-6 border-l-8 border-green-700 rounded-sm">
+                        <p class="text-sm italic text-slate-300 font-serif leading-relaxed">
+                            "The Thai record documents diverse assemblages capturing a major faunal transition from non-dinosaurian archosaurs to some of the earliest dinosaurs in the region."
+                        </p>
                     </div>
                 </div>
             `;
@@ -152,24 +165,24 @@
             window.scrollTo(0,0);
             const view = document.getElementById('content-view');
             view.innerHTML = `
-                <h2 class="heading-font text-3xl mb-8 text-white">Stratigraphic <span class="text-yellow-400">Analysis</span></h2>
+                <h2 class="heading-font text-2xl mb-8 text-white">Full Inventory</h2>
                 <div class="overflow-x-auto rounded border border-slate-800 shadow-2xl bg-[#11141b]">
-                    <table class="w-full text-left border-collapse">
+                    <table class="w-full text-left border-collapse min-w-[600px]">
                         <thead>
-                            <tr class="bg-slate-800 text-[9px] mono text-white uppercase tracking-[0.2em]">
-                                <th class="p-5">Ref_ID</th>
-                                <th class="p-5">Locality_Name</th>
-                                <th class="p-5">Formation</th>
-                                <th class="p-5">Age_Stage</th>
+                            <tr class="bg-slate-800 text-[9px] mono text-white uppercase">
+                                <th class="p-4">Ref_ID</th>
+                                <th class="p-4">Locality</th>
+                                <th class="p-4">Formation</th>
+                                <th class="p-4">Age</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800 mono text-[11px]">
                             ${atlasData.sites.map(s => `
-                                <tr class="hover:bg-green-900/40 transition-colors cursor-pointer group" onclick="renderSiteDetail(${s.id})">
-                                    <td class="p-5 text-slate-600">ID_${s.id}</td>
-                                    <td class="p-5 font-bold text-yellow-500 group-hover:text-white uppercase tracking-tight">${s.name}</td>
-                                    <td class="p-5 text-slate-400 italic">${s.stratigraphy.formation}</td>
-                                    <td class="p-5 text-slate-500">${s.stratigraphy.stage}</td>
+                                <tr class="hover:bg-green-900/40 transition-colors cursor-pointer group" onclick="renderSiteDetail(${s.id}); closeOnMobile();">
+                                    <td class="p-4 text-slate-600">ID_${s.id}</td>
+                                    <td class="p-4 font-bold text-yellow-500 uppercase">${s.name}</td>
+                                    <td class="p-4 text-slate-400 italic">${s.stratigraphy.formation}</td>
+                                    <td class="p-4 text-slate-500">${s.stratigraphy.stage}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -187,65 +200,57 @@
             document.getElementById('btn-'+id)?.classList.add('active-site');
 
             view.innerHTML = `
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 border-b-2 border-slate-800 pb-8">
-                    <div class="mb-6 md:mb-0">
-                        <nav class="mono text-[10px] text-yellow-500 mb-2 font-bold tracking-[0.3em] uppercase">Locality_Record // ${site.stratigraphy.serie}</nav>
-                        <h2 class="text-7xl font-black text-white italic tracking-tighter uppercase leading-none">${site.name}</h2>
-                        <p class="mono text-xs text-slate-500 mt-4 underline decoration-green-800 underline-offset-4 font-bold tracking-widest">${site.location.toUpperCase()}</p>
-                    </div>
-                    <div class="text-right flex flex-row md:flex-col items-center md:items-end gap-4">
-                        <div class="bg-yellow-400 text-black px-4 py-1 text-[10px] font-black mono uppercase">Validated Record</div>
-                        <span class="mono text-5xl font-black text-slate-800 tracking-tighter">REF_${site.id.toString().padStart(2, '0')}</span>
-                    </div>
+                <div class="mb-10 border-b-2 border-slate-800 pb-8">
+                    <nav class="mono text-[10px] text-yellow-500 mb-2 font-bold tracking-[0.3em] uppercase">Locality_Record // ${site.stratigraphy.serie}</nav>
+                    <h2 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter uppercase leading-none">${site.name}</h2>
+                    <p class="mono text-[10px] text-slate-500 mt-4 font-bold tracking-widest">${site.location.toUpperCase()}</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 space-y-10">
-                        <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="p-6 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
-                                <h4 class="mono text-[9px] text-slate-500 uppercase font-black mb-2 tracking-widest">Formation</h4>
-                                <p class="heading-font text-white text-xl">${site.stratigraphy.formation}</p>
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center md:text-left">
+                            <div class="p-4 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
+                                <h4 class="mono text-[9px] text-slate-500 uppercase mb-2">Formation</h4>
+                                <p class="heading-font text-white text-base">${site.stratigraphy.formation}</p>
                             </div>
-                            <div class="p-6 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
-                                <h4 class="mono text-[9px] text-slate-500 uppercase font-black mb-2 tracking-widest">Age_Stage</h4>
-                                <p class="heading-font text-white text-xl">${site.stratigraphy.stage}</p>
+                            <div class="p-4 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
+                                <h4 class="mono text-[9px] text-slate-500 uppercase mb-2">Age_Stage</h4>
+                                <p class="heading-font text-white text-base">${site.stratigraphy.stage}</p>
                             </div>
-                        </section>
+                        </div>
 
-                        <section class="bg-[#11141b] border border-slate-800 p-8 rounded-sm shadow-2xl relative overflow-hidden">
-                            <div class="absolute top-0 right-0 p-4 opacity-5 mono text-[60px] font-black uppercase pointer-events-none italic tracking-tighter">ICHNO</div>
-                            <h3 class="heading-font text-sm text-yellow-500 mb-8 border-b border-slate-800 pb-4 tracking-widest">Ichnological Synthesis</h3>
+                        <div class="bg-[#11141b] border border-slate-800 p-6 md:p-8 rounded-sm shadow-2xl relative overflow-hidden">
+                            <h3 class="heading-font text-xs text-yellow-500 mb-8 border-b border-slate-800 pb-4 tracking-widest">Ichnological Synthesis</h3>
                             <div class="space-y-8">
                                 <div>
-                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold tracking-widest">Assessed Trackmakers</h4>
-                                    <p class="text-2xl font-black text-slate-200 leading-tight tracking-tight">${site.ichnology.trackmakers.join(' • ').toUpperCase()}</p>
+                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold">Assessed Trackmakers</h4>
+                                    <p class="text-xl md:text-2xl font-black text-slate-200 leading-tight tracking-tight">${site.ichnology.trackmakers.join(' • ').toUpperCase()}</p>
                                 </div>
                                 <div>
-                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold tracking-widest">Ichnogenus Identification</h4>
-                                    <p class="text-base italic text-slate-400 font-serif leading-relaxed">${site.ichnology.genus.join(', ')}</p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div class="bg-green-900/20 border-t-4 border-green-700 p-6 shadow-2xl">
-                            <h3 class="heading-font text-[11px] text-green-500 mb-6 tracking-[0.2em] uppercase underline decoration-green-800 underline-offset-8">Field Assessment</h3>
-                            <div class="space-y-6 mono text-[11px]">
-                                <div>
-                                    <p class="text-slate-600 uppercase text-[9px] mb-2 font-bold tracking-widest">Conservation Index</p>
-                                    <p class="text-slate-200 font-bold leading-relaxed">${site.conservation.toUpperCase()}</p>
-                                </div>
-                                <div>
-                                    <p class="text-slate-600 uppercase text-[9px] mb-2 font-bold tracking-widest">Discovery Credit</p>
-                                    <p class="text-slate-200 font-bold">${site.discovery.discoverer.toUpperCase()} / YR_${site.discovery.year}</p>
+                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold">Ichnogenus</h4>
+                                    <p class="text-sm italic text-slate-400 font-serif leading-relaxed">${site.ichnology.genus.join(', ')}</p>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="bg-black/40 border border-slate-800 p-6 rounded-sm shadow-inner relative">
-                            <h4 class="mono text-[9px] font-black text-slate-700 uppercase mb-3 tracking-widest">Comparative Taxa</h4>
-                            <p class="text-[11px] text-slate-500 italic leading-relaxed uppercase">${site.taxa}</p>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-green-900/20 border-t-4 border-green-700 p-6 shadow-2xl">
+                            <h3 class="heading-font text-[10px] text-green-500 mb-4 uppercase">Field Assessment</h3>
+                            <div class="space-y-4 mono text-[10px]">
+                                <div>
+                                    <p class="text-slate-600 uppercase mb-1">Conservation Index</p>
+                                    <p class="text-slate-200 font-bold leading-relaxed text-xs">${site.conservation.toUpperCase()}</p>
+                                </div>
+                                <div>
+                                    <p class="text-slate-600 uppercase mb-1">Discovery Record</p>
+                                    <p class="text-slate-200 font-bold text-xs">${site.discovery.discoverer.toUpperCase()} / ${site.discovery.year}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-black/40 border border-slate-800 p-6 rounded-sm">
+                            <h4 class="mono text-[9px] font-black text-slate-700 uppercase mb-2">Comparative Taxa</h4>
+                            <p class="text-[10px] text-slate-500 italic leading-relaxed uppercase">${site.taxa}</p>
                         </div>
                     </div>
                 </div>
