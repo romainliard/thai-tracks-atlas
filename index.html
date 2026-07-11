@@ -41,7 +41,7 @@
         async function init() {
             try {
                 // Ensure filename matches exactly
-                const res = await fetch('atlas_geothai.json'); 
+                const res = await fetch('./atlas.json'); 
                 atlasData = await res.json();
                 
                 document.getElementById('atlas-title').innerText = atlasData.metadata.title;
