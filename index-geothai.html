@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Thailand Mesozoic Footprint Atlas</title>
+    <title>Thailand Mesozoic Trackway Atlas</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .active-link { border-left: 4px solid #4f46e5; background: #f5f3ff; color: #4f46e5; }
@@ -31,7 +31,7 @@
         let atlasData = {};
 
         async function init() {
-            const res = await fetch('atlas.json');
+            const res = await fetch('atlas-geothai.json');
             atlasData = await res.json();
             renderMenu();
             renderSection('intro'); // Default page
