@@ -1,0 +1,262 @@
+{
+  "metadata": {
+    "title": "Inventory of Mesozoic Vertebrate Tracksites in Thailand",
+    "source": "Liard et al. (2026)",
+    "region": "Indochina Terrane / Khorat Plateau",
+    "total_sites": 19
+  },
+  "sites": [
+    {
+      "id": 19,
+      "name": "Lam Pao",
+      "stratigraphy": {
+        "serie": "Lower Cretaceous",
+        "stage": "Aptian to Albian",
+        "ma": 100,
+        "formation": "Khok Kruat"
+      },
+      "location": "Kalasin, Mueang",
+      "discovery": { "discoverer": "Professional", "year": 2022 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["Caririchnium-like"],
+        "trackmakers": ["Ornithopod"]
+      },
+      "taxa": "Siamodon nimngami / Ratchasimasaurus suranareae / Sirindhorna khoratensis"
+    },
+    {
+      "id": 18,
+      "name": "Ban Nong Sa Rai",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Aptian to Albian", "ma": 100, "formation": "Khok Kruat" },
+      "location": "Nakhon Phanom, Tha Uthen",
+      "discovery": { "discoverer": "Professional", "year": 2010 },
+      "conservation": "Level 1 (lost/destroyed)",
+      "ichnology": {
+        "genus": ["Eubrontes-grade", "Asianopodus-like", "Caririchnium-like"],
+        "trackmakers": ["Theropods", "Ornithopod"]
+      },
+      "taxa": "Spinosauridae indet. / Siamraptor suwati / Ornithomimosauria indet. / Siamodon nimngami / Ratchasimasaurus suranareae / Sirindhorna khoratensis"
+    },
+    {
+      "id": 17,
+      "name": "Huai Dan Chum",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Aptian to Albian", "ma": 100, "formation": "Khok Kruat" },
+      "location": "Nakhon Phanom, Tha Uthen",
+      "discovery": { "discoverer": "Professional", "year": 2001 },
+      "conservation": "Level 4 (well preserved)",
+      "ichnology": {
+        "genus": ["Asianopodus-like", "Didactyl tracks", "Caririchnium-like", "Batrachopus"],
+        "trackmakers": ["Theropod", "Deinonychosaurian", "Ornithopod", "Crocodile"]
+      },
+      "taxa": "Ornithomimosauria indet. / Siamodon nimngami / Ratchasimasaurus suranareae / Sirindhorna khoratensis / Atoposauridae indet. / Goniopholidid sp."
+    },
+    {
+      "id": 16,
+      "name": "Phu Hin Rong Kla",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Barremian", "ma": 121, "formation": "Phu Phan" },
+      "location": "Phu Hin Rong Kla, Phitsanulok",
+      "discovery": { "discoverer": "Non-specialist", "year": 2024 },
+      "conservation": "Level 3 (moderately protected)",
+      "ichnology": {
+        "genus": ["Eubrontes-grade", "Grallator-grade", "Caririchnium-like"],
+        "trackmakers": ["Theropods", "Ornithopod"]
+      },
+      "taxa": "Spinosauridae indet. / Siamraptor suwati / Ornithomimosauria indet. / Siamodon nimngami / Ratchasimasaurus suranareae / Sirindhorna khoratensis"
+    },
+    {
+      "id": 15,
+      "name": "Phu Luang",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Barremian", "ma": 121, "formation": "Phu Phan" },
+      "location": "Loei, Phu Ruea",
+      "discovery": { "discoverer": "Paraprofessional", "year": 1985 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["Megalosauripus-grade"],
+        "trackmakers": ["Robust theropod"]
+      },
+      "taxa": "Spinosauridae indet. / Siamraptor suwati"
+    },
+    {
+      "id": 14,
+      "name": "Nong Sung",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 125, "formation": "Sao Khua" },
+      "location": "Mukdahan, Nong Sung",
+      "discovery": { "discoverer": "Professional", "year": 2007 },
+      "conservation": "Level 1 (lost/destroyed)",
+      "ichnology": {
+        "genus": ["Grallator-grade"],
+        "trackmakers": ["Small theropod"]
+      },
+      "taxa": "Phuwiangvenator yaemniyomi / Vayuraptor nongbualamphuensis / Kinnareemimus khonkaenensis"
+    },
+    {
+      "id": 13,
+      "name": "Phu Kao",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 125, "formation": "Sao Khua" },
+      "location": "Nong Bua Lamphu, Non Sang",
+      "discovery": { "discoverer": "Professional", "year": 2000 },
+      "conservation": "Level 4 (well preserved)",
+      "ichnology": {
+        "genus": ["Grallator-grade"],
+        "trackmakers": ["Small theropod"]
+      },
+      "taxa": "Tyrannosauroidea indet."
+    },
+    {
+      "id": 12,
+      "name": "Ba Chad",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 133, "formation": "Phra Wihan" },
+      "location": "Kalasin, Na Khu",
+      "discovery": { "discoverer": "Non-specialist", "year": 2023 },
+      "conservation": "Level 3 (moderately protected)",
+      "ichnology": {
+        "genus": ["Tridactyl trackway"],
+        "trackmakers": ["Medium theropods"]
+      },
+      "taxa": "Phuwiangvenator yaemniyomi / Vayuraptor nongbualamphuensis / Kinnareemimus khonkaenensis"
+    },
+    {
+      "id": 11,
+      "name": "Mun Daeng",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 133, "formation": "Phra Wihan" },
+      "location": "Loei, Dan Sai",
+      "discovery": { "discoverer": "Paraprofessional", "year": 2006 },
+      "conservation": "Level 3 (moderately protected)",
+      "ichnology": {
+        "genus": ["Grallator-grade"],
+        "trackmakers": ["Small theropod"]
+      },
+      "taxa": "Tyrannosauroidea indet."
+    },
+    {
+      "id": 10,
+      "name": "Phu Faek",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 133, "formation": "Phra Wihan" },
+      "location": "Kalasin, Na Khu",
+      "discovery": { "discoverer": "Non-specialist", "year": 1996 },
+      "conservation": "Level 4 (well preserved)",
+      "ichnology": {
+        "genus": ["Eubrontes-like", "Brontopodus-like"],
+        "trackmakers": ["Medium to large theropods", "Sauropod"]
+      },
+      "taxa": "Tyrannosauroidea indet. / Metriacanthosauridae indet. / Mamenchisauridae indet."
+    },
+    {
+      "id": 9,
+      "name": "Sai Yai Waterfall",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 133, "formation": "Phra Wihan" },
+      "location": "Prachin Buri, Khao Yai",
+      "discovery": { "discoverer": "Professional", "year": 1993 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["cf. Siamopodus khaoyaiensis"],
+        "trackmakers": ["Theropod"]
+      },
+      "taxa": "Tyrannosauroidea indet."
+    },
+    {
+      "id": 8,
+      "name": "Hin Lat Pa Chad",
+      "stratigraphy": { "serie": "Lower Cretaceous", "stage": "Berriasian to early Barremian", "ma": 143, "formation": "Phra Wihan" },
+      "location": "Khon Kaen, Phu Wiang",
+      "discovery": { "discoverer": "Professional", "year": 1989 },
+      "conservation": "Level 4 (well preserved)",
+      "ichnology": {
+        "genus": ["Neoanomoepus", "Tridactyl trackways", "Crocodile track"],
+        "trackmakers": ["Ornithopod", "Small theropod", "Crocodilian"]
+      },
+      "taxa": "Minimocursor phunoiensis / Tyrannosauroidea indet. / Indosinosuchus / Chalawan thailandicus"
+    },
+    {
+      "id": 7,
+      "name": "Non Tum 2",
+      "stratigraphy": { "serie": "Upper Triassic to Lower Jurassic", "stage": "?", "ma": null, "formation": "Upper Nam Phong" },
+      "location": "Chaiyaphum, Nong Bua Daeng",
+      "discovery": { "discoverer": "Professional", "year": 2023 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["Brontopodus"],
+        "trackmakers": ["Sauropod"]
+      },
+      "taxa": "Isanosaurus attavipachi / Sauropoda cf. Vulcanodontidae"
+    },
+    {
+      "id": 6,
+      "name": "Huai Duk",
+      "stratigraphy": { "serie": "Upper Triassic to Lower Jurassic", "stage": "?", "ma": null, "formation": "Upper Nam Phong" },
+      "location": "Phetchabun, Lom Sak",
+      "discovery": { "discoverer": "Paraprofessional", "year": 2009 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["Didactyl trackway"],
+        "trackmakers": ["Archosaur/theropod"]
+      },
+      "taxa": "Archosauria cf. Pseudosuchia / Theropoda indet."
+    },
+    {
+      "id": 5,
+      "name": "Non Tum",
+      "stratigraphy": { "serie": "Upper Triassic to Lower Jurassic", "stage": "?", "ma": null, "formation": "Upper Nam Phong" },
+      "location": "Chaiyaphum, Nong Bua Daeng",
+      "discovery": { "discoverer": "Non-specialist", "year": 2008 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["Eubrontes-grade", "Brontopodus", "didactyl trackway"],
+        "trackmakers": ["Theropod", "Sauropod", "Temnospondyl"]
+      },
+      "taxa": "Theropoda indet. / Isanosaurus attavipachi / Sauropoda cf. Vulcanodontidae"
+    },
+    {
+      "id": 4,
+      "name": "Tha Song Khon",
+      "stratigraphy": { "serie": "Upper Triassic to Lower Jurassic", "stage": "?", "ma": null, "formation": "Upper Nam Phong" },
+      "location": "Loei, Phu Kradung",
+      "discovery": { "discoverer": "Non-specialist", "year": 2007 },
+      "conservation": "Level 2 (at risk/unprotected)",
+      "ichnology": {
+        "genus": ["Gigandipus-like"],
+        "trackmakers": ["Large basal saurischian / theropod"]
+      },
+      "taxa": "Theropoda indet."
+    },
+    {
+      "id": 3,
+      "name": "Tad Yai",
+      "stratigraphy": { "serie": "Upper Triassic", "stage": "Norian", "ma": 205, "formation": "Huai Hin Lat (Dat Fa Member)" },
+      "location": "Nam Nao, Phetchabun",
+      "discovery": { "discoverer": "Professional", "year": 2023 },
+      "conservation": "Level 3 (moderately protected)",
+      "ichnology": {
+        "genus": ["Grallator-grade", "Brontopodus", "Chirotheriidae"],
+        "trackmakers": ["Theropod", "Sauropod", "Archosauriform / pseudosuchian"]
+      },
+      "taxa": "Theropoda indet."
+    },
+    {
+      "id": 2,
+      "name": "Tad Fa",
+      "stratigraphy": { "serie": "Upper Triassic", "stage": "Norian", "ma": 205, "formation": "Huai Hin Lat (Dat Fa Member)" },
+      "location": "Phetchabun, Nam Nao",
+      "discovery": { "discoverer": "Non-specialist", "year": 2022 },
+      "conservation": "Level 3 (moderately protected)",
+      "ichnology": {
+        "genus": ["Chirotheriidae / Brachychirotherium"],
+        "trackmakers": ["Aetosaur"]
+      },
+      "taxa": "Aetosauria indet."
+    },
+    {
+      "id": 1,
+      "name": "Tad Huai Nam Yai",
+      "stratigraphy": { "serie": "Upper Triassic", "stage": "Norian", "ma": 227, "formation": "Huai Hin Lat" },
+      "location": "Phetchabun, Nam Nao",
+      "discovery": { "discoverer": "Non-specialist", "year": 2000 },
+      "conservation": "Level 4 (well preserved)",
+      "ichnology": {
+        "genus": ["Apatopus lineatus"],
+        "trackmakers": ["Phytosaur"]
+      },
+      "taxa": "Phytosauria indet."
+    }
+  ]
+}
