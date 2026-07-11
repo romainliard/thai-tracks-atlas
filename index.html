@@ -1,97 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mesozoic Footprint Atlas of Thailand</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;600;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'Inter', sans-serif; background-color: #0c0e12; color: #e2e8f0; }
-        h1, h2, h3, .heading-font { font-family: 'Archivo Black', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
-        .mono { font-family: 'JetBrains Mono', monospace; }
-
-        .caution-bar {
-            background: repeating-linear-gradient(-45deg, #facc15, #facc15 10px, #171717 10px, #171717 20px);
-            height: 6px;
-        }
-
-        /* Formation Color Classes */
-        .fm-huai-hin-lat { background-color: #ddd6fe; color: #4c1d95; border-left: 6px solid #8b5cf6; }
-        .fm-nam-phong { background-color: #bae6fd; color: #0c4a6e; border-left: 6px solid #0ea5e9; }
-        .fm-phra-wihan { background-color: #064e3b; color: #ecfdf5; border-left: 6px solid #065f46; }
-        .fm-sao-khua { background-color: #10b981; color: #064e3b; border-left: 6px solid #059669; }
-        .fm-phu-phan { background-color: #6ee7b7; color: #064e3b; border-left: 6px solid #34d399; }
-        .fm-khok-kruat { background-color: #ecfdf5; color: #064e3b; border-left: 6px solid #a7f3d0; }
-        
-        .sidebar-item { transition: all 0.2s; margin-bottom: 2px; opacity: 0.9; }
-        .sidebar-item:hover { opacity: 1; transform: translateX(4px); }
-        .active-site { opacity: 1; transform: translateX(8px); outline: 2px solid #facc15; }
-
-        /* Animation for Sidebar */
-        #sidebar { transition: transform 0.3s ease-in-out; }
-        .sidebar-hidden { transform: translateX(-100%); }
-
-        @media (min-width: 1024px) {
-            #sidebar { transform: translateX(0) !important; }
-        }
-    </style>
-</head>
-<body class="flex h-screen overflow-hidden relative">
-
-    <!-- MOBILE OVERLAY -->
-    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 z-30 hidden lg:hidden"></div>
-
-    <!-- SIDEBAR -->
-    <nav id="sidebar" class="fixed lg:relative w-80 h-full bg-[#11141b] border-r border-slate-800 flex flex-col z-40 sidebar-hidden lg:transform-none shadow-2xl">
-        <div class="caution-bar"></div>
-        <div class="p-6 border-b border-slate-800 bg-black/20 flex justify-between items-center">
-            <div>
-                <h1 class="text-xl text-white italic leading-tight">Mesozoic Atlas<br><span class="text-yellow-400 uppercase tracking-tighter">Thailand</span></h1>
-                <p class="text-[9px] mono text-slate-500 mt-2 tracking-[0.3em] uppercase">Stratigraphic Database</p>
-            </div>
-            <!-- Close Button for Mobile -->
-            <button onclick="toggleSidebar()" class="lg:hidden text-slate-500 hover:text-white text-2xl">✕</button>
-        </div>
-        
-        <div id="menu" class="flex-1 overflow-y-auto py-4">
-            <button onclick="renderIntro(); closeOnMobile();" class="w-full text-left px-6 py-3 hover:bg-slate-800 text-slate-400 font-bold text-xs tracking-widest border-l-4 border-transparent mb-2 transition-all uppercase">Summary Abstract</button>
-            <button onclick="renderTable(); closeOnMobile();" class="w-full text-left px-6 py-3 hover:bg-slate-800 text-slate-400 font-bold text-xs tracking-widest border-l-4 border-transparent mb-6 transition-all uppercase">Inventory Table</button>
-            
-            <div class="px-6 mb-3 text-[10px] font-black text-slate-600 uppercase tracking-widest flex justify-between">
-                <span>Localities</span>
-                <span>Formation Map</span>
-            </div>
-            <div id="site-list" class="px-2 space-y-1 pb-10">
-                <!-- Site links will be generated here -->
-            </div>
-        </div>
-    </nav>
-
-    <!-- MAIN CONTENT -->
-    <div class="flex-1 flex flex-col min-w-0">
-        
-        <!-- MOBILE HEADER -->
-        <header class="lg:hidden bg-[#11141b] border-b border-slate-800 p-4 flex items-center justify-between z-20">
-            <button onclick="toggleSidebar()" class="text-yellow-400 p-2 border border-slate-700 rounded bg-slate-800">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-            </button>
-            <span class="heading-font text-sm tracking-widest text-slate-300">Atlas Explorer</span>
-            <div class="w-10"></div> <!-- Spacer -->
-        </header>
-
-        <main class="flex-1 overflow-y-auto p-4 md:p-8 lg:p-12 bg-[#0c0e12]">
-            <div id="content-view" class="max-w-5xl mx-auto min-h-full">
-                <div class="flex items-center justify-center h-64 text-slate-600 animate-pulse mono text-xs">
-                    CONNECTING_DATA_STREAM...
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        let atlasData = { sites: [] };
+let atlasData = { sites: [] };
 
         // NAVIGATION LOGIC
         function toggleSidebar() {
@@ -112,11 +19,31 @@
                 const res = await fetch('atlas.json'); 
                 atlasData = await res.json();
                 renderSiteMenu();
-                renderIntro(); 
+
+                // DEEP LINKING LOGIC: Check URL for a specific site ID on load
+                const hash = window.location.hash; // e.g., "#19"
+                if (hash && hash.length > 1) {
+                    const siteId = parseInt(hash.substring(1));
+                    renderSiteDetail(siteId);
+                } else {
+                    renderIntro();
+                }
             } catch (err) {
                 document.getElementById('content-view').innerHTML = `<div class="p-8 bg-red-950/20 text-red-500 rounded border border-red-800">Error: ${err.message}</div>`;
             }
         }
+
+        // Add this to handle the browser's "Back" button correctly
+        window.onhashchange = function() {
+            const hash = window.location.hash;
+            if (hash && hash.length > 1) {
+                renderSiteDetail(parseInt(hash.substring(1)));
+            } else if (hash === "" || hash === "#intro") {
+                renderIntro();
+            } else if (hash === "#inventory") {
+                renderTable();
+            }
+        };
 
         function getFmClass(fm) {
             const name = fm.toLowerCase();
@@ -134,7 +61,7 @@
             list.innerHTML = atlasData.sites.map(s => {
                 const colorClass = getFmClass(s.stratigraphy.formation);
                 return `
-                <button onclick="renderSiteDetail(${s.id}); closeOnMobile();" id="btn-${s.id}" 
+                <button onclick="location.hash='${s.id}'; closeOnMobile();" id="btn-${s.id}" 
                     class="w-full text-left px-4 py-3 rounded-sm text-[10px] font-bold mono sidebar-item ${colorClass}">
                     ID_${s.id.toString().padStart(2, '0')} // ${s.name.toUpperCase()}
                 </button>
@@ -143,11 +70,12 @@
         }
 
         function renderIntro() {
+            window.location.hash = "intro";
             window.scrollTo(0,0);
             const view = document.getElementById('content-view');
             view.innerHTML = `
                 <div class="border-b-4 border-yellow-400 pb-6 mb-10">
-                    <h2 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter">Project Inventory</h2>
+                    <h2 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter uppercase">Project Inventory</h2>
                     <p class="mono text-yellow-400 text-[10px] mt-2 uppercase tracking-widest">Mesozoic Vertebrate Footprints of Thailand</p>
                 </div>
                 <div class="space-y-6 text-slate-300 text-base md:text-lg">
@@ -162,102 +90,6 @@
         }
 
         function renderTable() {
+            window.location.hash = "inventory";
             window.scrollTo(0,0);
-            const view = document.getElementById('content-view');
-            view.innerHTML = `
-                <h2 class="heading-font text-2xl mb-8 text-white">Full Inventory</h2>
-                <div class="overflow-x-auto rounded border border-slate-800 shadow-2xl bg-[#11141b]">
-                    <table class="w-full text-left border-collapse min-w-[600px]">
-                        <thead>
-                            <tr class="bg-slate-800 text-[9px] mono text-white uppercase">
-                                <th class="p-4">Ref_ID</th>
-                                <th class="p-4">Locality</th>
-                                <th class="p-4">Formation</th>
-                                <th class="p-4">Age</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800 mono text-[11px]">
-                            ${atlasData.sites.map(s => `
-                                <tr class="hover:bg-green-900/40 transition-colors cursor-pointer group" onclick="renderSiteDetail(${s.id}); closeOnMobile();">
-                                    <td class="p-4 text-slate-600">ID_${s.id}</td>
-                                    <td class="p-4 font-bold text-yellow-500 uppercase">${s.name}</td>
-                                    <td class="p-4 text-slate-400 italic">${s.stratigraphy.formation}</td>
-                                    <td class="p-4 text-slate-500">${s.stratigraphy.stage}</td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        }
-
-        function renderSiteDetail(id) {
-            window.scrollTo(0,0);
-            const site = atlasData.sites.find(s => s.id === id);
-            const view = document.getElementById('content-view');
-            
-            document.querySelectorAll('#site-list button').forEach(b => b.classList.remove('active-site'));
-            document.getElementById('btn-'+id)?.classList.add('active-site');
-
-            view.innerHTML = `
-                <div class="mb-10 border-b-2 border-slate-800 pb-8">
-                    <nav class="mono text-[10px] text-yellow-500 mb-2 font-bold tracking-[0.3em] uppercase">Locality_Record // ${site.stratigraphy.serie}</nav>
-                    <h2 class="text-4xl md:text-6xl font-black text-white italic tracking-tighter uppercase leading-none">${site.name}</h2>
-                    <p class="mono text-[10px] text-slate-500 mt-4 font-bold tracking-widest">${site.location.toUpperCase()}</p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 space-y-6">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center md:text-left">
-                            <div class="p-4 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
-                                <h4 class="mono text-[9px] text-slate-500 uppercase mb-2">Formation</h4>
-                                <p class="heading-font text-white text-base">${site.stratigraphy.formation}</p>
-                            </div>
-                            <div class="p-4 bg-[#11141b] border-l-4 border-green-600 shadow-xl">
-                                <h4 class="mono text-[9px] text-slate-500 uppercase mb-2">Age_Stage</h4>
-                                <p class="heading-font text-white text-base">${site.stratigraphy.stage}</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-[#11141b] border border-slate-800 p-6 md:p-8 rounded-sm shadow-2xl relative overflow-hidden">
-                            <h3 class="heading-font text-xs text-yellow-500 mb-8 border-b border-slate-800 pb-4 tracking-widest">Ichnological Synthesis</h3>
-                            <div class="space-y-8">
-                                <div>
-                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold">Assessed Trackmakers</h4>
-                                    <p class="text-xl md:text-2xl font-black text-slate-200 leading-tight tracking-tight">${site.ichnology.trackmakers.join(' • ').toUpperCase()}</p>
-                                </div>
-                                <div>
-                                    <h4 class="mono text-[10px] text-slate-500 uppercase mb-3 font-bold">Ichnogenus</h4>
-                                    <p class="text-sm italic text-slate-400 font-serif leading-relaxed">${site.ichnology.genus.join(', ')}</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-4">
-                        <div class="bg-green-900/20 border-t-4 border-green-700 p-6 shadow-2xl">
-                            <h3 class="heading-font text-[10px] text-green-500 mb-4 uppercase">Field Assessment</h3>
-                            <div class="space-y-4 mono text-[10px]">
-                                <div>
-                                    <p class="text-slate-600 uppercase mb-1">Conservation Index</p>
-                                    <p class="text-slate-200 font-bold leading-relaxed text-xs">${site.conservation.toUpperCase()}</p>
-                                </div>
-                                <div>
-                                    <p class="text-slate-600 uppercase mb-1">Discovery Record</p>
-                                    <p class="text-slate-200 font-bold text-xs">${site.discovery.discoverer.toUpperCase()} / ${site.discovery.year}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="bg-black/40 border border-slate-800 p-6 rounded-sm">
-                            <h4 class="mono text-[9px] font-black text-slate-700 uppercase mb-2">Comparative Taxa</h4>
-                            <p class="text-[10px] text-slate-500 italic leading-relaxed uppercase">${site.taxa}</p>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        init();
-    </script>
-</body>
-</html>
+            const view = document.getElementById('
